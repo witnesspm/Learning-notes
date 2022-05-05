@@ -1,0 +1,56 @@
+修改data数据
+this.setData({
+     变量名:"修改的数据"
+})
+
+绑定事件：
+             bind绑定：冒泡绑定     bindtap
+             catch绑定：阻止冒泡绑定
+
+
+获取用户信息： 
+wx.getUserProfile({
+      desc: '用于完善会员资料', // 声明获取用户个人信息后的用途，后续会展示在弹窗中，请谨慎填写
+      success: (res) => {
+        this.setData({
+          userInfo: res.userInfo,
+          hasUserInfo: true
+        })
+      }
+    })
+
+
+//导航栏
+"tabBar": {
+      "color": "#333",
+      "selectedColor": "#d43c33",
+      "backgroundColor": "#ffffff",
+      "list": [
+        {
+        "pagePath": "pages/index/index",
+        "text": "主页",
+        "iconPath": "/static/images/tabs/tab-home.png",
+        "selectedIconPath": "/static/images/tabs/tab-home-current.png"
+      },
+      {
+        "pagePath": "pages/video/video",
+        "text": "视频",
+        "iconPath": "/static/images/tabs/select.png",
+        "selectedIconPath": "/static/images/tabs/selected.png"
+      },
+      {
+        "pagePath": "pages/personal/personal",
+        "text": "个人中心",
+        "iconPath": "/static/images/tabs/tab-my.png",
+        "selectedIconPath": "/static/images/tabs/tab-my-current.png"
+      }
+    ]
+  }
+
+//手指事件
+ <view class="cover-container"
+  bindtouchstart="handleTouchStart"//点击
+  bindtouchmove="handleTouchMove"//移动
+  bindtouchend="handleTouchEnd"//松手
+  >
+

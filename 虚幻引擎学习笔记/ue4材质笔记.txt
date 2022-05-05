@@ -1,0 +1,29 @@
+单个字母是快捷键
+o 反向表达式
+clamp 限制最大值最小值表达式
+p 位移表达式
+e 提升纹理材质
+rotator 旋转表达式
+time 时间表达式，一般配合其他一同使用
+sine 正弦表达式，可以配合时间表达式，每一秒进行一个正弦波动
+m 乘法表达式
+d 除法表达式
+1 常量
+2 二维常量
+3 三维
+4 四维 多一个控制透明度的
+shift+c 分量蒙版，控制rgb通道
+a 加法表达式
+subtract 减法表达式
+abs 绝对值表达式
+particle color 粒子颜色表达式
+desatur ation 去色表达式
+depth fade 将两个材质边缘融化
+i if表达式
+t 贴图纹理表达式
+u 纹理坐标表达式 对纹理进行划分（可以调整uv大小）
+l 线性插值表达式  控制两个颜色的比例
+fresnel 边缘发光
+flatten 增加法线的偏平化
+switch  静态参数开关，通过默认值来控制输出的真假
+landscapelayerblend  景观分层混合

@@ -1,0 +1,94 @@
+get获取
+post新增
+put更新
+delete删除
+
+axios({
+ 
+	1：url       //  通过设置url参数，决定请求到底发送给谁
+	2：method    // 设置请求的类型，get/post/delete..
+	3：baseURL   // 设置url的基础结构，发送请求配置时只需要设置url即可，axios会自动将两者进行拼接
+	4：headers   // 头信息：比较实用的参数，在某些项目当中，进行身份校验的时候，要求在头信息中加入一个特殊的			   标识  // 来检验请求是否满足要求，可以借助headers对请求头信息做一个配置
+	5：params    // 也是一个比较常用的参数，来设定url参数的，可以通过params直接添加url参数名和参数值
+	6：data
+	7：timeout    // 超时请求时间，单位是ms 超过请求时间，请求就会被取消
+
+}).then(response=>{})//成功回调
+
+
+
+axios.request(
+       method:'get',
+     url:'地址',
+
+);
+
+
+添加:
+axios.post(
+    '地址',
+    {{
+        更新数据
+    }}
+)
+
+
+设置默认配置
+axios.defaults.method='GET';//设置默认的请求类型为GET
+axios.defaults.baseURL='http://localhost:3000';//设置基础URL
+等等
+
+
+创建实例对象
+const duanzi = axios.create({
+    baseURL:'',
+    timeout:
+})
+
+duanzi({
+   url:'',
+});
+
+
+或者
+
+duanzi.get('默认地址后面的').then(response=>{})
+
+
+请求拦截器//满足条件才可以发送请求
+axios.interceptors.request.use(function(config){
+console.log('请求拦截器成功');
+return config;
+},function(error){
+    console.log('请求拦截器失败');
+    return Promise.reject(error);
+})
+
+
+响应拦截器
+axios.interceptors.response.use(function(config){
+console.log('请求拦截器成功');
+return config;
+},function(error){
+    console.log('请求拦截器失败');
+    return Promise.reject(error);
+})
+
+
+先请求拦截，再响应拦截
+
+
+取消请求
+先定义
+let cancel=null ；
+然后在axios中定义
+axios({
+method:'GET',
+url:'地址',
+cancelToken:new axios.CancelToken(function(c){
+cancel = c;
+})
+}).then(response => {
+      console.log(response);
+})
+最后执行cancle();来取消请求

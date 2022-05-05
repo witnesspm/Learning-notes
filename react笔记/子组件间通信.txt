@@ -1,0 +1,12 @@
+npm i pubsub-js//安装插件
+
+import PubSub from 'pubsub-js'//导入
+//消息订阅
+ this.toKen =   PubSub.subscribe('订阅名',(msg(存储订阅名),接收的数据)=>{
+           
+        })
+//消息发布
+ PubSub.publish('订阅名',发送的数据);
+
+//取消订阅
+ PubSub.unsubscribe(this.toKen)

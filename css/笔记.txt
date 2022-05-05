@@ -1,0 +1,279 @@
+单位
+px//像素
+百分比
+em//相对于元素的字体大小来计算
+rem//相对于根元素的字体大小来计算
+
+overflow:
+		visible//默认值,子元素会从父元素溢出
+		hidden//移除内容将会被裁剪，不会显示
+		scroll//生成两个滚动条，通过滚动条来看完整内容
+overflow-x
+overflow-y
+
+padding//内边距
+margin//外边距
+
+background-color:darken(#bfa,10%);//可以使任意颜色加深10%，或者其他修改
+
+display:
+	inline//行内元素
+	block//块元素
+	inline-block//行加块元素，既可以设置宽度和高度又不会被独占一行
+	table//将元素设置为一个表格
+	none//元素不在页面中显示
+visibility:
+	visible//默认值，元素在页面中正常显示
+	hidden//元素在页面中隐藏不显示，但是依然占据页面的位置
+
+
+
+
+相对定位
+绝对定位
+固定定位
+position:fixed;//与绝对定位大部分一致，但定位永远参照浏览器视口进行定位
+粘滞定位
+position:sticky;//与相对定位基本一致，可以在元素到达某个位置时固定
+
+
+
+字体方面样式
+color//设置字体颜色
+font-size//字体的大小
+font-family//字体格式，可以同时指定多个字体，浏览器会自动使用该类别下的字体
+	serif	//衬线字体
+	sans-serif	//非衬线字体
+	monospace	      //等宽字体
+也可以将服务器中的字体直接提供给用户去使用
+例，写在应用字体的样式之前
+@font-face{
+font-family:'myfont';//指定字体名字
+src:url('字体路径');
+}
+line-height://行高，可以让行高与div高度相等，让字体居中
+text-align:
+	left//左侧对齐
+	right//右对齐
+	center//居中对齐
+	justify//两端对齐
+
+
+
+背景图片样式
+background-color//背景颜色
+background-image//背景图片路径
+background-repeat://
+	repeat//默认值，背景会沿着x，y轴双方向重复
+	repeat-x//x轴重复
+	repeat-y//y轴重复
+	no-repeat//背景图片不重复
+
+background-postiion://设置背景图片位置
+	通过top left right bottom center 几个表示方位的词来设置背景
+
+background-clip://设置背景的范围
+	border-box//默认值，背景会出现在边框的下边
+	padding-box//背景不会出现在边框，只会出现在内容区和内边距
+	content-box//背景只会出现在内容区
+background-origin://背景图片的偏移量计算的原点，可以写数值
+	padding-box//默认值，从内边距开始计算
+	content-box//背景图片的偏移量从内容区处计算
+	border-box//从边框处计算
+background-size://设置背景图片大小
+	第一个值表示宽度，第二个值表示高度
+	cover//图片比例不变，将元素铺满
+	contain//图片比例不变，将图片在元素中完整显示
+
+
+过渡样式
+transition-property://指定要执行过渡的属性
+	多个属性间用,隔开
+	如果所有属性都需要过渡，则使用all关键字
+transition-duration://指定过渡效果的持续时间
+	时间单位，s，ms，1s=1000ms
+transition-timing-function://过渡的时序函数
+	ease//默认值，慢速开始，先加速，再减速
+	linear//匀速运动
+	ease-in//加速运动
+	ease-out//减速运动
+	ease-in-out//先加速，后减速
+	cubic-bezier()//指定时序函数
+		https://cubic-bezier.com//可以通过这个网站调整
+	steps(2，end)//分布执行过渡效果，将时间通过第一个参数分为几份，然后第二个参数设置在开始还是结束执行，end，在时间结束执行，start，在时间开始时执行
+
+transition-delay:过渡效果的延迟，等待一段时间后再执行过渡
+
+
+动画样式
+animation-name://要对当前元素生效的关键帧的名字
+	例
+	animation-name:test;
+	@keyframes test{
+	from{
+	}
+	25%,40%,to{//可选项，可以通过打关键帧来丰富动画,可以用,简化代码
+	}
+	to{
+	}
+	}
+	
+animation-duration:2s;//动画持续时间
+animation-timing-function://跟上面一样
+animation-iteration-count:20//动画执行次数
+animation-delay//动画延迟
+animation-direction://指定动画运行的方向
+	normal//默认值，from到to
+	reverse//to到from
+	alternate//从from到to，重复执行动画时反向执行
+	alternate-reverse//上面的逆序执行
+animation-play-state://控制动画运行
+	running//动画运行
+	paused//动画暂停
+animation-fill-mode://动画填充模式
+	none//默认值，动画执行完毕后元素回到原来位置
+	forwards//元素在执行完毕后停止在动画结束位置
+	backwards//延迟时,元素处于from的样式
+	both//结合forwards和backwards
+	
+transform://设置元素变形效果,应用z轴时最好设置perspective:800px//设置浏览器与人眼视距,例
+	translateX()//沿x轴方向平移，相对于元素原先的位置,可以用百分比
+	translateY()
+	translateZ()
+	rotateX(45deg)//x轴旋转,deg是°
+	rotateY()//y轴旋转
+	rotateZ()//z轴旋转
+	scaleX()//缩放
+	scaleY()
+	scaleZ()
+backface-bisibility://设置元素背面显示
+	visible//显示
+	hidden//不显示
+
+样式选择器
+a:link    {color:green;}//激活的
+a:visited {color:green;}//已访问的
+a:hover   {color:red;}//鼠标悬停的
+a:active  {color:yellow;}//点击时
+
+
+阴影
+box-sadow
+
+css3新增，兼容性稍差
+--变量名:值//创建变量
+var(--变量名)//使用变量
+calc(200px*2)//计算函数,可以在里面放值
+
+
+
+/////////////////////////////////////
+less,css预处理语言
+简化结构
+.box1{
+color:#bfa;
+	.box2{//给后代
+		color:#bfb;
+			.box3{
+				color:#bfc;
+			}
+	}
+	>.box3{//给子元素
+		color:red;
+	}
+	&:hover{//快捷设置被选中的样式
+		color:orange;
+	}
+}
+
+变量
+@变量名:值//声明
+width:@变量名//使用
+
+作为类名，或者一部分值使用时，必须以@{变量名}的形式使用,例
+@a:200px;
+@b:box6;
+.@{b}{
+	width:@a;
+	background-image:url("@{b}/1.png");
+}
+
+width:300px
+height:$width//$可以直接引用上面的属性
+
+扩展
+.p4{
+	样式
+}
+.p5{
+	&:extend(.p4)//应用p4的样式
+}
+
+混合
+.p4(){//加括号之后这个样式是搜索不到的，只能给别的样式使用
+	样式
+}
+.p5{
+	.p4();
+}
+混合可以设置实参，形参，例
+.p4(@w:100px){//可以设置默认值
+	width:@w;
+}
+.p5{
+	.p4(500px);
+}
+
+less中所有数值都可以直接进行计算,+-*/
+box{
+	width:100px+100px
+}
+
+@import "路径"//可以将其他less引入当前的less
+
+///////////////////////////
+实现手机端布局完美视口，让电脑端设置的大小完美适配到手机
+<meta name="viewport"  content="width=device-width,initial-scale=1.0">
+
+由于不同手机设备视口和像素比不同，所以同样的375个像素在不同的设备下意义是不一样的
+一般移动端用vw来布局
+	100vw=一个视口的宽度
+	100vw=750px(设计图的像素)
+	0.13333vw=1px
+
+	vw太麻烦，可以适配
+html{
+	font-size:5.3333vw;	
+}
+.box{
+width:18.75rem;//此时1rem=40px
+}
+
+
+
+媒体查询，可以查询不同的设备，为其分别设置样式
+@media 查询规则{
+	body{
+		width:100px;
+	}
+}
+查询规则：
+	all//所有设备
+	print//打印设备
+	screen//带屏幕的设备
+	speech//屏幕阅读器
+
+媒体特性:
+	width,height
+	min-width//视口的最小宽度(视口大于指定宽度时生效)
+	max-width//视口的最大宽度(视口小于指定宽度时生效)
+	常用断点
+		小于768 超小屏幕 max-width=768px
+		大于768 小屏幕
+		大于992 中
+		大于1200 大
+@media (width:500px){//当视口宽度为500时，应用下面样式
+	body{
+		background-color:#bfa;
+	}
+}

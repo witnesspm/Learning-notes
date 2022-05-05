@@ -1,0 +1,132 @@
+cnpm install react-router-dom//安装路由配置
+import {BrowserRouter} from 'react-router-dom'
+import { Link, Route } from 'react-router-dom'
+
+用BrowserRouter或者HashRouter包住app
+举例
+  <Link className="list-group-item" to="/about">About</Link >
+<Link className="list-group-item" to="/home">Home</Link >
+
+
+ <Route path="/about" component={About} />
+<Route path="/home" component={Home} />
+
+路由组件与一般组件
+一般组件：<Demo/>
+路由组件：<Route path="/demo" component={Demo}/>
+
+存放位置不同
+一般组件：component
+路由组件：pages
+
+接收到的props不同
+ 一般组件：写组件标签是传递了什么就接收什么
+路由组件：接收到三个固定的属性
+                history:
+                      go: ƒ go(n)
+                      goBack: ƒ goBack()
+                      goForward: ƒ goForward()
+                      push: ƒ push(path, state)
+                      replace: ƒ replace(path, state)
+
+                location:
+                      pathname: "/about"
+                      search: ""
+                      state: undefined
+                match:
+                      params: {}
+                      path: "/about"
+                      url: "/about"
+
+
+NavLink:升级版Link
+<NavLink activeClassName="样式"  className="样式"  to="/xxx"></NavLink >
+//被点击时新增activeClassName中的样式
+
+
+再新建一个MyNavLink组件，需要import {NavLink} from 'react-router-dom'
+<NavLink activeClassName="样式" className="样式" {...this.props}/>
+
+调用时只需
+<MyNavLink to="/xxx">xxx</MyNavLink>
+//封装NavLink,由于react自带标签体内容的属性children，所以xxx也会存放在{...props}中
+
+
+
+Switch组件
+//注册路由时使用，可以让路由匹配到一个后不再继续向下匹配，提高效率
+import {Switch } from 'react-router-dom'
+然后用Switch包裹住注册路由
+
+
+开启精准匹配//一般不开启，只有模糊匹配不好使才用
+exact={true}
+例：    <Link className="list-group-item" to="/home/a">Home</Link >
+           <Route path="/home" component={Home} />
+//可以匹配到
+           <Link className="list-group-item" to="/home/a">Home</Link >
+           <Route exact={true} path="/home" component={Home} />
+//不可以匹配到
+
+
+重定向
+import {Redirect} from 'react-router-dom'
+写在注册路由附近
+<Redirect to="/xxx"/>
+//默认给一个路由
+
+
+
+二级路由：
+注册子路由时要写上父路由的path值，不能开严格模式
+路由的匹配是按照注册顺序进行的
+
+
+向路由组件传递params参数
+例：
+//传值
+<Link to={`/a/home/message/detail/${obj.id}/${obj.title}`} >{obj.title}</Link>//携带参数
+ <Route path="/a/home/message/detail/:id/:title" component={Detail} />//声明接收
+//接收
+ const {id,title}= this.props.match.params//接收参数
+
+
+向路由组件传递search参数
+例：
+//传值
+<Link to={`/a/home/message/detail/?id=${obj.id}&title=${obj.title}`} >{obj.title}</Link>//携带参数
+ <Route path="/a/home/message/detail" component={Detail} />//无需声明
+//接收
+const {search} = this.props.location
+获取到的search是urlencoded编码字符串，需要用querystring解析
+可以用一个库import qs from 'querystring'
+qs.parse()将urlencoded编码字符串解析成{id:"01",title:"消息1"}格式
+qs.stringify()将对象格式解析成id=01&title=消息1格式
+
+
+向路由传递state(与组件的state不同)参数
+例:
+//传值
+ <Link to={{pathname:'/a/home/message/detail',state:{id:obj.id,title:obj.title}}} >{obj.title}</Link>//携带参数
+ <Route path="/a/home/message/detail" component={Detail} />//无需声明
+//接收
+  const {id,title}= this.props.location.state
+
+
+
+replace模式
+在link中写，将压栈变成替换，让网页不留下痕迹
+
+
+编程式路由导航
+方法里面（只有路由组件可以用）
+this.props.history.push(`地址`,{传值})
+this.props.history.replace(`地址`,{传值})
+this.props.history.goBack()//回退网址
+this.props.history.goForward()//前进网址
+this.props.history.go(数值)//数值是正数的话前进x页，负数的话后退x页
+
+一般组件想要用的话需要
+import {withRouter} from 'react-router-dom'
+然后用withRouter加工一般组件,让一般组件具备路由组件特有的属性
+export default withRouter(组件名)//写在组件最后

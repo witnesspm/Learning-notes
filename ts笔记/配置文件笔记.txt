@@ -1,0 +1,59 @@
+目录下创建一个tsconfig.json文件
+直接tsc -w就可以自动编译ts文件
+
+"include"用来指定哪些ts文件需要被编译,省略则全部编译
+	路径：**表示任意目录，*表示任意文件
+{
+	"include":[
+		"./src/**/*"
+		]
+}
+
+"exclude"用来指定那些文件不被编译
+{
+	"exclude"[
+		"./src/**/*"
+		]
+}
+
+"compilerOptions":{
+		//target 用来指定ts被编译为es的版本
+		"target":"ES3" ,
+		//module 指定要使用的模块化的规范
+		"module":"es2015",
+		//lib用来指定项目中要使用的库,一般不用
+		"lib":[],
+		//outDir 用来指定编译后文件所在的目录
+		"outDir":"./dist",
+		//将代码合并为一个文件
+		"outFile":"./dist/app.js",
+		//是否对js文件进行编译，默认false
+		"allowJs":true,
+ 		//是否用ts规范检查js代码语法，默认是false
+		"checkJs":true,
+		//是否移除注释，默认false
+		"removeComments":true,
+		//不生成编译后的文件
+		"noEmit":true,
+		//当有错误时不生成编译后的文件
+		"noEmitOnError":true,
+
+		//所有严格检查的总开关
+		"strict":true,
+		//开启严格模式,默认false
+		"alwaysStrict":true,
+		//不允许隐式any类型
+		"noImpLicitAny":true,
+		//不允许不明确类型的this
+		"noImpLicitThis":true,
+		//严格的检查空值
+		"strictNullChecks":true,
+		}
+
+
+
+
+
+
+
+

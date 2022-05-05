@@ -1,0 +1,77 @@
+class 新类名 extends 类名 {
+constructor(例，新例){
+super(例)
+this.新例 = 新例
+}
+
+}
+
+//函数式组件
+function（）{
+return
+}
+//创建类式组件
+class 类名（首字母大写） extends React.Component{
+
+//组件将要挂载钩子
+componentWillMount(){
+}
+
+
+//render调用的时机：初始化渲染、状态更新之后
+render(){
+return()
+}
+
+//组件挂载完毕之后调用，只调用一次
+componentDidMount(){
+}
+
+
+//组件将要卸载，由ReactDOM.unmountComponentAtnode()触发
+componentWillUnmount(){
+}
+
+//组件将要接收新的props时的钩子
+componentWillReceiveProps(){
+}
+
+//控制组件更新的阀门，不写此钩子默认为true，如果返回值为false则组件不更新
+shouldComponentUpdate(){
+}
+
+//组件将要更新的钩子
+componentWillUpdate(){
+
+}
+
+//组件更新完毕的钩子
+componentDidUpdate(preprops,preState,snapshot){
+
+}
+
+}
+
+
+常用钩子
+     componentDidMount(){}
+         一般在这个钩子中做一些初始化的事
+
+     componentWillUnmount(){}
+         一般在这个钩子中做一些收尾的事
+
+   render(){}
+
+新版本要在
+componentWillMount
+componentWillReceiveProps
+componentWillUpdate
+前加UNSAFE_前缀
+
+
+新增
+//得到一个派生的状态,此钩子比较罕见，适用于state在任何情况都取决于props时
+1.getDerivedStateFromProps(props,state){}
+
+//快照,获取更新之前的数据,然后把值传给componentDidUpdate
+2.getSnapshotBeforeUpdate(){}

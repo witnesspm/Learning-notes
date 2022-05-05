@@ -1,0 +1,225 @@
+jsx语法规则
+1.定义虚拟DOM时，不要写引号
+2.标签中混入js表达式时要用{}
+3.样式的类名指定不要用class，要用className
+4.内联样式，要用style={{key：value，key：value}}的形式去写
+5.只有一个跟标签
+6.标签必须闭合
+7.标签首字母
+     （1）.若小写字母开头，则将改标签为html中同名元素，若html中无该标签对应的同名元素，则报错。
+     （2）若大写字母开头 react就去渲染对应的组件，若组件没有定义，则报错。
+
+//渲染到页面
+ReactDOM.render(渲染对象,document.getElementById(""));
+
+//js类的用法
+class 类名{
+//构造器方法
+constructor(例){
+this.例=例
+}
+//一般方法
+方法名（）{
+}
+//类中可以直接写赋值语句,给类的实例对象添加一个属性，名为a，值为1
+a=1
+}
+
+创建实例对象
+const p1 = new 类名('实例')
+
+继承
+
+class 新类名 extends 类名 {
+constructor(例，新例){
+super(例)
+this.新例 = 新例
+}
+
+}
+
+//函数式组件
+function（）{
+return
+}
+//创建类式组件
+class 类名（首字母大写） extends React.Component{
+
+//组件将要挂载钩子
+componentWillMount(){
+}
+
+
+//render调用的时机：初始化渲染、状态更新之后
+render(){
+return()
+}
+
+//组件挂载完毕之后调用，只调用一次
+componentDidMount(){
+}
+
+
+//组件将要卸载
+componentWillUnmount(){
+}
+
+//组件将要接收新的props时的钩子
+componentWillReceiveProps(){
+}
+
+//控制组件更新的阀门，不写此钩子默认为true，如果返回值为false则组件不更新
+shouldComponentUpdate(){
+}
+
+}
+
+//组件将要更新的钩子
+componentWillUpdate(){
+
+}
+
+//组件更新完毕的钩子
+componentDidUpdate(){
+
+}
+
+onclick="demo()"//正常按钮绑定函数
+onClick={demo}//recat按钮绑定函数
+
+组件实例三大属性：
+1.state：
+状态（state）不可直接更改，例如：this.state.ishot=！ishot
+必须通过setstate来修改，且更新是一种合并，例如：this.setState({isHot:!isHot})
+
+//简写state
+class 组件名（首字母大写） extends React.Component{
+
+//初始化状态
+state={状态名1：值,状态名2:值}
+render(){
+return
+}
+//自定义方法用赋值语句加箭头函数
+demo = ()=>{
+		const isHot = this.state.isHot
+		this.setState({isHot:!isHot})
+	}
+	}
+}
+
+2.props（通过标签属性从组件外向组件内传递变化的数据）:
+react中的对象值
+限制props中的属性：
+首先导入prop-types.js
+类名.propTypes = {
+  对象属性:PropTypes.string.isRequired//限制对象属性的类型为字符串,isRequired此属性为必填项
+  方法名:PropTypes.func;//限制为方法
+}
+指定属性默认值：
+类名.defaultProps={
+  sex:'默认值'
+  
+}
+
+
+props简写方式：
+//讲属性限制和默认值写在类的里面，在前面加上static
+例	class Person extends React.Component{
+	               static propTypes = {
+		  name:PropTypes.string.isRequired,
+		  sex:PropTypes.string,
+		  age:PropTypes.number,
+		  speak:PropTypes.func
+		}
+		static defaultProps={
+		  sex:'男',
+		  age:18
+		}
+		render(){
+			const {name,age,sex}=this.props
+			return (
+				<ul>
+				<li>姓名:{name}</li>
+				<li>性别:{sex}</li>
+				<li>年龄:{age+1}</li>
+				</ul>
+			)
+		}
+	}
+
+
+函数式组件使用props：
+function preson(props){
+const {name,age}=props
+return{
+<ul>
+				<li>姓名:{name}</li>
+				<li>性别:{sex}</li>
+				<li>年龄:{age}</li>
+				</ul>
+}
+}
+preson.defaultProps={
+  sex:'默认值'
+  
+}
+
+3.refs（react中的id）：
+showData = ()=>{
+		
+		const {input1}=this
+		alert(input1.value)
+		
+	}
+//内联一个ref，然后函数可以找到这个ref来进行操作
+<input  ref={currentNode=>this.input1 = currentNode} type="text" placeholder="点击按钮提示数据"/>
+<button onClick={this.showData}>点我提示左侧的数据</button>
+
+除了内联还有一种调用函数的ref写法，影响不大：
+s = (c)=>{
+this.input1 = c;
+}
+<input  ref={this.s} type="text" placeholder="点击按钮提示数据"/>
+
+
+
+最新方式：
+先在类式组件里定义
+名= React.createRef()
+
+然后在标签里添加ref，例：
+<input  ref={this.myref} type="text" placeholder="点击按钮提示数据"/>
+
+在函数里，例：
+showData = ()=>{
+		
+		
+		alert(this.myref.current.value);
+		
+	}
+
+
+//请勿过度使用ref
+
+
+通过event.target可以得到发生事件的DOM元素对象，例：
+	
+	showData2 = (event)=>{
+		alert(event.target.value,event.keyCode（获得键盘的值）);
+	}
+	render(){
+  return(
+					<div>
+					<input  onBlur={this.showData2} type="text" placeholder="失去焦点提示数据"/>
+					</div>
+					
+				)
+
+}
+
+
+ 
+
+key值尽量少用index
+看到51

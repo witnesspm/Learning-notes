@@ -1,0 +1,58 @@
+文件操作，先引入fs核心模块
+var fs=require('fs')
+读取文件//
+fs.readFile('文件路径',function(error,data){
+console.log(data.toString());
+})
+
+写文件//
+fs.writeFile('路径','写入内容',function(error){
+})
+
+
+__dirname    表示当前文件所处的目录
+
+
+path路径模块
+var path=require('path')
+path.join(__dirname,'./a.txt')//可以把多个路径片段拼接为完整的路径字符串，返回值为字符串
+path.basename(路径,'.html')//可以获取路径中的最后一部分，经常通过这个方法获取文件名,返回值为字符串,第二项为文件后缀名，如填写则返回值不加后缀
+
+path.extname(路径)//获取路径扩展名部分
+
+
+
+
+http核心模块
+var http = require('http')
+返回server实例//
+var server = http.createServer()
+接受请求，触发请求事件//
+server.on('reqquest',function(req,res){
+req//是请求对象，它包含了与客户端相关的数据和属性
+req.url//是客户端请求的URL地址
+req.method//是客户端的method请求类型
+
+
+res//是响应对象，它包含了与服务器相关的数据和属性
+//为了防止浏览器中文显示乱码的问题，需要设置响应头
+res.setHeader('Content-Type','text/html;charset=utf-8')
+res.end()//向客户端发送指定的内容并结束这次请求的处理过程
+
+
+})
+绑定端口号，启动服务器//
+server.listen(端口号,function(){
+})
+
+
+
+模块作用域相关知识
+正常情况下，一个模块的变量只能在模块内获取到
+
+module//对象，它里面存储了和当前模块有关的信息
+
+module.exports//在自定义模块中，可以将模块内的成员共享出去，供外界使用，外界用require()方法导入自定义模块时，得到的就是module.exports所指对象，默认为空，可以简化为exports
+
+
+

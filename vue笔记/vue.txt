@@ -1,0 +1,231 @@
+vue组件：1.全局组件
+Vue.component("组件名",{
+data:function(){
+return{
+    count:0
+}
+},
+(模板，里面只能有一个标签)template:"<button v-on:click='count++'>单击了{{count}}次</button>"
+})
+
+使用还是需要定义vue实例
+new Vue({
+   el:"#id名"
+})
+
+
+然后可以直接在html调用<组件名></组件名>
+
+
+2.局部组件
+new Vue({
+   el:"#id名"，
+   components:{
+   "组件名":
+{
+data:function(){
+return{
+    count:0
+}
+},
+(模板)template:"<button v-on:click='count++'>单击了{{count}}次</button>"
+}
+
+
+}
+
+})
+
+
+
+vue写v-bind：key=“id”能优化页面
+
+v-bind单向绑定
+v-model双向绑定//只能应用在表单类元素上
+v-model修饰符
+              .lazy//当在输入框输入数据时，数据并不会立即改变，当光标离开输入框以后，数据才会实现同步改变
+              .number//当用户输入数值类型的数据时，v-model.number会自动把输入的数据转换为数值类型，注意如果用户输入特殊字母e，number属性不能识别
+              .trim//自动过滤用户输入的首尾空白字符
+ 
+v-show值为假则元素隐藏
+v-if值为假则元素删除
+v-text//跟差值语法差不多，不支持结构解析
+v-html//支持结构解析，其他跟v-text一样
+v-cloak//解决网速过慢页面闪现问题，一般配合css中[v-cloak]{display:none;}使用
+v-once//让差值语法数据改变，页面不变化
+v-pre//跳过所在节点编译
+
+
+methods:{}//里面存放方法
+钩子函数
+
+beforeCreate(){}//此时无法通过vm访问到data中的数据，methods中的方法
+created(){}//此时可以访问到data中的数据，methods中的方法
+beforMount(){}//页面呈现未经vue编译的dom结构时，在此函数中所有对dom操作最终都不奏效
+mounted(){}//完成挂载时调用，一般在此进行开启定时器，发送网络请求，订阅消息，绑定自定义事件等初始化操作
+
+beforeUpdate(){}//此时数据是新的，页面是旧的
+updated(){}//此时数据是新的，页面是新的
+
+beforeDestroy(){}//即将执行销毁实例，目前data.等等都是可用的，一般在此阶段关闭定时器，取消订阅消息等收尾操作
+                         .$destroy()//销毁一个实例
+destroyed(){}//销毁后
+
+
+vue事件修饰符（可以连着写）：
+.preventDefault()//组织默认行为
+在vue中可以在@click.prevent来阻止
+.stop//阻止冒泡
+.once//事件只触发一次
+.capture//使用事件的捕获模式
+.self//只有event.target是当前操作元素时才触发事件
+.passive//事件的默认行为立即执行，无需等待事件回调执行完毕
+
+键盘事件
+@keyup//按下按键抬起后触发
+@keydown//按下按键不用抬起就触发
+@keyup.enter//绑定别名，这个是按回车触发
+vue常用别名：
+回车：enter
+删除：delete（捕获删除和退格键）
+退出：esc
+空格：space
+换行：tab
+上：up
+下：down
+左：left
+右：right
+
+
+计算属性//用于要用的属性不存在，需要通过已有的属性计算得来
+computed:{
+          方法名:{
+                  get(){
+                             方法体
+                             return 返回值
+                          }，
+                      //set不是必须写，需要修改此方法的时候用
+                    set(){
+                         }
+                     }
+                   }
+
+
+检视属性
+watch:{
+              vm的属性:{
+                                           handler(变化前的数据，变化后的数据){//当监测变量发生变化时
+                                                                                          执行函数
+                                                                                                      },
+                                           immediate:true,//初始化时用handler调用一下
+                                           deep//深度监测,监视多级结构所有属性的变化
+                                    }
+          }
+
+
+排序
+数组.sort((a,b)=>{
+    return a-b//升序，b-a降序
+})
+
+Vue.set//设置date中的属性
+JSON.stringify()//方法用于将 JavaScript 值转换为 JSON 字符串。
+
+
+
+自定义指令属性//用原生dom做一个指令
+directives:{
+     自定义指令名(指令所在的元素,本次绑定的信息){
+                              
+                            }
+}
+
+
+
+ref属性
+在标签加入ref="xxx"
+然后通过this.$refs.xxx可以获取到真实dom元素，跟id差不多用法，用在组件标签上是组件实例对象
+
+
+props属性
+从 组件标签传值
+在子组件接收如下
+props:{
+   变量名:{//也可以直接写变量名，不加以下限制
+                  type:String,//限制接收类型
+                  required:true,//是非必须接收
+                  default:99//默认值
+               }
+}
+通过this.变量名可以调用props
+
+
+过滤器//用于格式化文本
+<!-- 在双花括号中 -->
+{{ message | capitalize }}
+
+<!-- 在 `v-bind` 中 -->
+<div v-bind:id="rawId | capitalize"></div>
+
+
+filters: {
+  capitalize: function (value) {
+       可以写一些规定字符串的代码
+  }
+}
+
+
+插件//用于增强vue
+定义插件：//新建一个js文件
+export default{ 
+install = function(Vue,options){
+    1.添加全局方法或者 property。如：vue-custom-element
+
+     2.添加全局资源：指令/过滤器/过渡等。如 vue-touch
+
+      3.通过全局混入来添加一些组件选项。如 vue-router
+
+       4.添加 Vue 实例方法，通过把它们添加到 Vue.prototype 上实现。
+
+          5.一个库，提供自己的 API，同时提供上面提到的一个或多个功能。如 vue-router
+}}
+使用插件：//在main.js中通过imp进入，然后用Vue.ues(插件文件名)使用
+
+
+
+样式局部化
+在组件style后加scoped
+
+浏览器本地存储//关闭浏览器也存在，一般存储大小为5mb左右
+localStorage.setItem('key','val');//保存数据
+localStorage.getItem('key')//读取数据
+localStorage.removeItem('key')//删除
+localStorage.clear()//清空
+
+浏览器存储//关闭浏览器数据消失
+sessiocalStorage.setItem('key','val');//保存数据
+sessiocalStorage.getItem('key')//读取数据
+sessiocalStorage.removeItem('key')//删除
+sessiocalStorage.clear()//清空
+
+
+组件自定义事件--绑定
+父组件在子组件上绑定v-on:自定义="方法名"
+子组件调用this.$emit('自定义',传参)
+然后父组件用此方法的时候可以接收参数
+
+
+组件自定义事件--解绑
+  this.$off('自定义')//解绑一个自定义事件
+  this.$off(['自定义1','自定义2'])//解绑多个自定义事件
+  this.$off()//解绑所有自定义事件
+
+安装全局事件总线//在其他函数中就可以调用bus在其身上添加各种自定义事件，组件用完记着解绑
+在main中new Vue中写
+beforeCreate(){//钩子函数
+  Vue.prototype.$bus=this
+}
+
+
+$nextTick(function(){})//在dom加载完毕后执行，可以用于一些逻辑顺序问题
+

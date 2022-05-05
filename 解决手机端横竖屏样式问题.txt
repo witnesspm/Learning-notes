@@ -1,0 +1,10 @@
+在body上绑定事件onorientationchange="updateOrientation();"
+
+然后css上
+@media screen and (orientation: portrait) {
+ 竖屏样式
+}
+
+@media screen and (orientation: landscape) {
+ 横屏样式
+}

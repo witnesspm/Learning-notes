@@ -1,0 +1,26 @@
+需要
+indexn.js
+package.json
+README.md
+三个文件，
+package.json内容
+{
+    "name":"pomie-the-package",//发布包名
+    "version": "1.0.0",//版本
+    "main": "index.js",//主路径
+    "description": "提供了格式化时间，HTMLEscape相关的功能",//提示
+    "keywords": ["pomie"],//关联搜索
+    "license": "ISC"//许可证
+}
+
+
+
+先将npm源从淘宝源切换到正常
+npm login
+
+pomie
+sc86753558
+1252355624@qq.com
+
+切换到发布的包根目录下，npm publish发布
+npm unpublish 包名 --force//删除已发布的包

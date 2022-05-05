@@ -1,0 +1,19 @@
+js命令
+<script type="text/javascript">
+    $('#text1').click(function () {                 //给按钮设置点击事件
+        //console.log(11111);
+        $.ajax({
+            type: "post",						    //提交方式
+            url: "../control/login.php",		    //执行的url(控制器/操作方法)
+            async: true,							//是否异步
+            data: $("form").serialize(),		    //获取form表单的数据//数据格式
+            success: function (data) {
+                alert(data);
+            }
+        });
+    })
+</script>
+
+获取传递参数
+$x = $_POST['id'];
+$y = $_POST['name'];

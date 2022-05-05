@@ -1,0 +1,11 @@
+	<!-- 引入react -->
+		<script type="text/javascript" src="./js/react.development.js"></script>
+		<script type="text/javascript" src="./js/react-dom.development.js"></script>
+		<script type="text/javascript" src="./js/babel.min.js"></script>
+		
+		<script type="text/babel">  /*此处一定要写babel*/
+			const VDOM = <h1>helloworld</h1>  /*此处一定不要写引号，因为不是字符串*/
+			ReactDOM.render(VDOM,document.getElementById("test"))
+		</script>
+	
+

@@ -1,0 +1,54 @@
+ts类型
+   例 let a:number；
+number 任意数字
+string 任意字符串
+boolean 布尔值
+字面量 let a:10//跟常量差不多，然后就不可以存除了10以外的值了
+any 任意类型
+	类型断言//告诉解析器变量的实际类型
+	s = e as string;
+	s= <string>e;
+unknown  未知类型，不可以赋值给别的变量
+void 用来表示函数没有返回值，返回为空
+never  表示永远不会返回结果，连空都不反回
+object   表示一个对象，{}用来指定对象中可以包含哪些属性，语法：{属性名:属性值,属性名:属性值};
+            后续赋值时必须与定义时一样，例： 
+                                                               let b:{name:string,age:number};
+ 			               b={name:'孙悟空',age:18}//不可以超出，不可以少
+            加问号表示属性是可选的,例：	                
+                                                                let b:{name:string,age?:number};
+				b={name:'孙悟空'}//可以不填
+            [name:string]:any表示任意类型的属性,例:
+				let b:{name:string,[name:string]:any};
+				b={name:'孙悟空',age:18,gender:'男'}//除第一个后续可以任意填
+            设置函数结构类型
+				let d:(a:number,b:number)=>number;//两个参数为number型，返回值为number
+				d=function(n1:number,n2:number):number{};
+数组    
+	方式1：let e:string[];//设置类型的数组,只能放该类型的数组
+	方式2：let g:Array<number>;
+tuple   元组，固定长度的数组
+	let h:[string,number];
+	h=['hello',123];
+enum 枚举   帮助提供数值意义
+	enum Gender{
+		male = 0,
+		female = 1
+		     }
+
+	例与对象配合
+		let i:{name:string,gender:Gender};
+		i={
+			name:'孙悟空',
+			gender:Gender.male//'male'
+			}
+&//表示同时
+	let j:{name:string}&{age:number};
+	j = {name:'孙',age:18}//得同时满足上面的条件
+
+类型别名 
+	type mytype = 任意类型，或者1|2|3等复杂类型
+	let k:mytype;
+	
+
+

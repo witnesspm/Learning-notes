@@ -1,0 +1,59 @@
+//安装
+npm i antd
+
+//高级配置
+yarn add @craco/craco
+//修改 package.json 里的 scripts 属性
+"scripts": {
+-   "start": "react-scripts start",
+-   "build": "react-scripts build",
+-   "test": "react-scripts test",
++   "start": "craco start",
++   "build": "craco build",
++   "test": "craco test",
+}
+
+//然后在项目根目录创建一个 craco.config.js 用于修改默认配置。
+const CracoAntDesignPlugin = require("craco-antd");
+
+module.exports = {
+  plugins: [{ plugin: CracoAntDesignPlugin }],
+};
+
+yarn add craco-antd antd
+
+
+//改变主题
+在craco.config.js里输入：
+const CracoLessPlugin = require('craco-less');
+
+
+module.exports = {
+    plugins: [
+      {
+        plugin: CracoLessPlugin,
+        options: {
+          lessLoaderOptions: {
+            lessOptions: {
+              modifyVars: { '@primary-color': '#1DA57A' },
+              javascriptEnabled: true,
+            },
+          },
+        },
+      },
+    ],
+  };
+
+然后把App.css换成App.less
+/* src/App.less */
+- @import '~antd/dist/antd.css';
++ @import '~antd/dist/antd.less';
+
+/* src/App.js */
+- import './App.css';
++ import './App.less';
+
+yarn add craco-less
+
+
+

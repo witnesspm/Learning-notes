@@ -1,0 +1,90 @@
+一.展开运算符：...数组名
+1.把数组展开
+2.可以连接两个数组，例：var a=[1,2]   var b=[3,4]   var c=[...a,...b]
+
+
+.reduce：数组相加
+例 function sum(...numbers){
+return numbers.reduce((a,b)=>{
+   return a+b
+})
+}//结果为10
+console.log(sum(1,2,3,4));
+
+
+3.复制对象
+let a= {name:'tom',age:18}
+lat b={...a}
+
+4.复制对象的同时修改属性
+lat c={...a,name:'jack',addsex:'男'}
+
+
+
+二.文本框加提示信息
+<input type="text" placeholder="点击按钮提示数据"/>
+
+三.代表空格，可以调整格式
+&nbsp；
+
+四.表单控件失去焦点执行函数：
+onBlur={this.showData2}//react中
+onblur="myFunction()"//js中
+
+五.追加数组
+push
+
+六删除数组
+splice(1,1)//从第一个下标删除一个内容
+
+七.表单控件更变执行函数（例如单选按钮被点击）
+onchange
+
+八.卸载组件
+ReactDOM.unmountComponentAtNode(document.getElementById('id名'))
+
+九. 定时器
+setInterval(()=>{
+函数体
+},毫秒);
+
+十.清除定时器
+clearInterval(id名)
+
+十一.强制更新，执行组件生命周期，具体看图
+forceUpdate()
+
+十二.文本框改成单选按钮
+<input type="checkbox" checked=""(根据第一次的值打√，后续不可变)   defaultChecked=""(根据第一次的值打√，后续可变) />
+
+十三.数组过滤
+数组名.filter(()=>{
+})
+
+十四.对数组条件求和
+数组名.reduce
+例：var numbers = [65, 44, 12, 4];
+ 
+function getSum(total, num) {
+    return total + num;
+}
+function myFunction(item) {
+    document.getElementById("demo").innerHTML = numbers.reduce(getSum);
+}
+输出结果为125
+
+十五.连续解构赋值
+
+let obj={a:{b:{c:1}}}
+const  {a:{b:{c}}}= obj
+//abc都可以单独拿出来用
+
+const {a:{b:data}}=obj
+console.log(data);
+//还可以改名
+
+十六.react手脚架安装
+create-react-app 项目名称
+
+十七.指定的毫秒数后调用函数或计算表达式
+setTimeout(()=>{},毫秒)

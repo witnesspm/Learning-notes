@@ -1,0 +1,432 @@
+安装，在项目所处的目录中，运行如下的终端命令，
+npm i express@4.17.1
+
+
+建立最基础的服务器
+const express=require('express')
+const app=express()
+app.listen(80,()=>{
+	函数体
+})
+
+
+监听GET请求
+//req:请求对象（包含了与请求相关的属性与方法）
+//res:响应对象（包含了与相应相关的属性与方法）
+app.get("请求URL",function(req,res){
+	函数体
+})
+
+监听POST请求
+//req:请求对象（包含了与请求相关的属性与方法）
+//res:响应对象（包含了与相应相关的属性与方法）
+app.post("请求URL",function(req,res){
+	函数体
+})
+
+
+把内容响应给客户端，主体参数可以是String或Buffer对象或对象或Array。
+res.send()
+
+获取URL中携带的查询参数
+//默认是空对象，客户端用?name=za&age=20 这种查询字符串形式发送的参数，可以通过req.query.name获取到
+console.log(req.query)
+
+
+获取URL中的动态参数
+//默认是空对象，里面存放着通过:动态匹配到的参数
+req.params
+例
+app.get('/user/:id',(req,res)=>{
+    console.log(req.params)
+    res.send(req.params)
+})
+发送http://127.0.0.1/user/5请求，返回值为{"id": "5"}
+
+
+托管静态资源
+可以多次调用express.static()来托管多个静态资源目录
+express.static()
+app.use(express.static('文件目录'))//例
+可以通过http://127.0.0.1/1.jpg获取
+
+如果希望在托管的静态资源访问路径之前，挂在路径前缀，可以
+app.use('/public',express.static("public"))
+可以通过http://127.0.0.1/public/1.jpg获取
+
+
+nodemon
+修改代码后可以自动重启项目，方便开发
+npm i -g nodemon
+可以用
+nodemon app.js
+来替换node app.js启动项目
+
+
+express中的路由
+app.METHOD(PATH,HANDLER)
+METHOD请求类型
+PATH  URL地址
+HANDLER 处理函数
+
+模块化路由
+例，新的文件讲路由对象向外导出
+const express =require("express")
+const router = express.Router()
+router.get("/",(req,res)=>{
+    res.send("这是路由")
+})
+module.exports=router
+
+然后主要文件
+const userRouter=require("./router")
+app.use(userRouter)
+接收后通过app.use挂载
+
+为路由模块添加前缀，与静态资源添加前缀一致
+app.use('/api',userRouter)
+
+
+
+express全局中间件,本质上就是一个function处理函数,必须包含next函数
+const mv = function(req,res,next){
+next();
+})
+创建完通过
+app.use(mv)
+来注册组件，执行顺序是是从app.use 到 请求路由
+
+多个中间件之间，共享同一份req和res，可以在上游的中间件中，统一为req，res添加自定义属性和方法，供下游使用
+
+express局部中间件
+不使用app.use()定义的中间件
+例//
+const mv = function(req,res,next){
+next();
+})
+app.get("/",mv,function(req,res){
+   console.log("在路由中调用局部中间件")
+})
+
+调用多个局部中间件
+app.get("/",mv1,mv2,function(req,res){
+   console.log("在路由中调用局部中间件")
+})
+
+
+中间件五个使用注意事项
+1.一定要在路由之前注册中间件
+2.客户端发送过来的请求，可以连续调用多个中间件进行处理
+3.执行完中间件的业务代码之后，不要忘记调用next()函数
+4.调用next()之后不要再写额外代码
+5.连续调用多个中间件是，多个中间件中间，共享req和res对象
+
+
+中间件的五个分类
+1.应用级别的中间件
+通过app.use()或app.get()或app.post()，绑定到app实例上的中间件
+
+2.路由级别的中间件
+绑定到express.Router()实例上的中间件
+
+3.错误级别的中间件
+专门用来捕获整个项目中发生的异常错误，必须注册在所有路由之后！
+格式:function(err,req,res,next){}
+例
+	app.get('/',(req,res)=>{
+	    throw new Error('服务器发生错误')
+  	  res.send("home page") 
+	})
+
+	app.use((err,req,res,next)=>{
+ 	   console.log(err.message)
+  	  res.send(err.message) 
+	})
+需要在上面抛出错误，然后通过err捕获错误
+throw new Error('错误内容')可以手动报错
+
+4.express内置的中间件
+	①express.static  快速托管静态资源的内置中间件
+		app.use("/a",express.static('./静态资源文件夹'))
+	②express.json  解析JSON格式的请求体数据
+		app.use(express.json()); 
+	③express.urlencoded  解析URL-encoded格式的请求体数据
+		app.use(express.urlencoded({extended:false})); 
+
+5.第三方的中间件
+例，使用body-parser这个第三方中间件，来解析请求体数据
+	①运行npm i body-parser
+	②使用require导入中间件
+	③app.use()注册并使用中间件
+		// 解析 post 表单数据的中间件
+		const bodyParser = require('body-parser')
+		app.use(bodyParser.urlencoded({ extended: false }))
+
+
+
+中间件事件
+    req.on('data',(chunk)=>{
+        str+=chunk
+    })
+
+    req.on('end',()=>{
+        const body=qs.parse(str)
+        
+        req.body=body
+        next()
+    })
+
+
+
+接口的跨域问题
+1.cors（主流的解决方案）
+	cors是express的一个第三方中间件，通过安装和配置cors中间件，可以很方便地解决跨域问题
+		①运行npm i cors
+		②使用const cors = require('cors')
+		③在路由之前调用app.use(cors())配置中间件
+
+			配置选项,查看该文档https://github.com/expressjs/cors#simple-usage-enable-all-cors-requests
+
+
+	core响应头部Access-Contriol-Allow-Origin:<origin>|*     //*表示所有
+		例如，下面只允许来自http://pomie.top的请求：
+			res.setHeader('Access-Contriol-Allow-Origin','http://pomie.top')
+	core响应头部Access-Contriol-Allow-Headers
+		如果客户端向服务器发送了额外的请求头信息，则需要在服务器端，通过Access-Contriol-Allow-Headers对额外的请求头进行声明，否则这次请求会失败
+		例如，下面允许客户端额外发送Content-Type和X-Custom-Header请求头
+			res.setHeader('Access-Contriol-Allow-Headers','Content-Type','Custom-Header')
+	core响应头部Access-Contriol-Allow-Methods
+		默认情况下，cors仅支持客户端发起GET、POST、HEAD请求，如果客户端希望发送put等请求，需要通过Access-Contriol-Allow-Methods指明实际请求所允许使用的http
+		例如，下面只允许post、get请求方法
+			res.setHeader('Access-Contriol-Allow-Methods','post','get')
+		例如，下面允许所有请求方法
+			res.setHeader('Access-Contriol-Allow-Methods','*')
+	
+2.jsonp（只支持get请求）
+
+
+
+
+在项目中操作数据库的步骤
+1.安装mysql模块
+	npm i mysql
+2.连接到数据库
+	const mysql =require('mysql')
+
+	const db=mysql.createPool({
+  	  host:'47.100.101.103', //数据库的ip地址
+  	  user:'root',           //登陆数据库的账号
+  	  password:'86753558',   //密码
+ 	   database:'nodelx'      //指定操作哪个数据库
+	})
+
+	//测试是否连接上
+	db.query('select 1',(err,results)=>{
+  	  if(err)return console.log(err.message)
+ 	   console.log(results)
+	})
+3.通过mysql模块执行sql语句
+查询
+	//查询数据库的所有数据
+	db.query('SELECT * FROM users',(err,results)=>{
+  	  if(err)return console.log(err.message)
+  	  console.log(results)
+	})
+插入
+	//插入一条数据
+	const user = {name:'苏权力',age:22}
+	//?是占位符
+	const sqlStr=`INSERT INTO users(name,age) VALUES(?,?)`
+	db.query(sqlStr,[user.name,user.age],(err,results)=>{
+  	  if(err)return console.log(err.message)
+  	  //如果执行的是插入语句，results是一个对象，可以通过results.affectedRows判断是否插入成功
+  	  if(results.affectedRows ===1) console.log("插入成功")
+	})
+	
+     如果数据对象的每个属性和数据表字段一一对应，可以通过如下方法快速插入数据
+	const user = {name:'苏权力',age:22}
+	//?是占位符
+	const sqlStr=`INSERT INTO users SET ?`
+	db.query(sqlStr,user ,(err,results)=>{
+  	  if(err)return console.log(err.message)
+  	  //如果执行的是插入语句，results是一个对象，可以通过results.affectedRows判断是否插入成功
+  	  if(results.affectedRows ===1) console.log("插入成功")
+	})
+
+更新
+	const user = {id:1,name:'苏权力',age:22}
+	const sqlStr=`UPDATE users SET name=?,age=? WHERE id=?`
+	db.query(sqlStr,[user.name,user.age,user.id],(err,results)=>{
+   	 if(err)return console.log(err.message)
+   	 //如果执行的是插入语句，results是一个对象，可以通过results.affectedRows判断是否插入成功
+  	  if(results.affectedRows ===1) console.log("更新成功")
+	})
+ 
+     如果数据对象的每个属性和数据表字段一一对应，可以通过如下方法快速更新数据
+	const user = {id:1,name:'苏权',age:22}
+	const sqlStr=`UPDATE users SET ? WHERE id=?`
+	db.query(sqlStr,[user,user.id],(err,results)=>{
+  	  if(err)return console.log(err.message)
+  	  //如果执行的是插入语句，results是一个对象，可以通过results.affectedRows判断是否插入成功
+  	  if(results.affectedRows ===1) console.log("更新成功")
+	})
+
+删除
+ 	const sqlStr=`DELETE FROM users WHERE id=?`
+	//如果sql语句中有多个占位符，必须使用数组为每个占位符制定具体的只
+	//只有一个占位符的话，可以省略数组
+	db.query(sqlStr,2,(err,results)=>{
+  	  if(err)return console.log(err.message)
+  	  //如果执行的是插入语句，results是一个对象，可以通过results.affectedRows判断是否插入成功
+  	  if(results.affectedRows ===1) console.log("删除成功")
+	})
+
+标记删除，直接删除数据比较危险，保险起见一般会在表中建立status字段，为0时代表未删除，为1代表删除，当用户执行删除的动作时，我们执行update语句将数据status字段更新为1即可
+	
+
+
+
+身份认证模式
+1.session，通过提交给浏览器cookie，然后再认证cookie
+	在express中使用session认证：
+		①安装express-session
+			npm i express-session
+		②配置express-session中间件
+			app.use(session({
+				secrte:'keyboard cat',//secret属性的值可以为任意字符串
+				resave:false,//固定写法
+				saveUninitialized:true//固定写法
+			}))
+		③将数据保存到session中
+		   例：
+			//登陆api接口
+			app.post('/api/login',(req,res)=>{
+  			   if(req.body.username!=='admin'||req.body.password!=='000'){
+     				   return res.send({status:1,msg:'登陆失败'})
+   			    }
+    			 //将登陆成功的用户信息保存到session中
+   			 //只有成功配置了express-session中间件后，才能通过req点出来session这个属性
+  			  req.session.user=req.body  //保存用户信息，可以随意给session添加属性
+   			  req.session.islogin=true   //保存登陆状态
+   			  res.send({status:0,msg:'登录成功'}) 
+			})
+		④获取session中的数据
+		    例：
+			//获取用户姓名的接口
+			app.get('/api/username',(req,res)=>{
+			    if(req.session.islogin){
+			        return res.send({status:1,msg:'fail'})
+ 			   }
+ 			   res.send({
+ 			       status:0,
+			       msg:'success',
+ 			       username:res.session.user.username  //直接获取即可
+			    })
+			})
+		⑤清空session
+			req.session.destroy()
+
+session认证有局限性，涉及到前后端跨域最好不要用
+
+涉及到前后端跨域推荐使用JWT认证机制,JWT是目前最流行的跨域认证解决方案
+	在express中使用JWT
+		1.安装JWT相关的包
+			npm install jsonwebtoken express-jwt
+				//jsonwebtoken用于生成JWT字符串
+				//express-jwt用于将JWT字符串解析还原成JSON对象
+		2.导入JWT相关的包
+			//导入用于生成JWT字符串的包
+			const jwt=require('jsonwebtoken')
+			//导入用于将客户端发送过来的JWT字符串，解析还原成json对象的包
+			const expressJWT=require('express-jwt')
+		3.定义secret密钥
+
+  			//定义密钥，建议将密钥命名为secretKey,值是随意的字符串
+			const secretKey='pomie'
+
+			为了保证JWT字符串的安全性，防止JWT字符串在网络传输过程中被别人破解，我们需要专门定义一个用于加密和解密的secret密钥
+			①当生成JWT字符串的时候，需要使用secret密钥对用户的信息进行加密，最终得到加密好的JWT字符串
+			            //调用jwt.sign方法生成JWT字符串，并通过token属性发送给客户端
+  				  //参数1：用户的信息对象
+  				  //参数2：加密的密钥
+    				  //参数3：配置对象，可以配置当前token的有效期
+				  //生成的token头部最好在服务器端加上'Bearer '，才能解析，前端请求有token权限的接口时，需要在请求头上携带Authorization:token
+   				  const tokenStr=jwt.sign({username:userinfo.username},secretKey,{expiresIn:'30s'})
+    				  res.send({status:0,msg:'登录成功',token:tokenStr}) 
+			②当把JWT字符串解析还原成JSON对象的时候，需要使用secret密钥进行解密
+				  //注册将JWT字符串解析还原成JSON对象的中间件,需要提供密钥,算法名称，同时可以通过unless属性设置那些接口不需要认证
+				  //只要配置成功了express-jwt这个中间件，就可以把解析出来的用户信息，挂载到req.user属性上
+				  app.use(expressJWT({secret:secretKey,algorithms:['HS256']}).unless({path:[/^\/api\//]}))
+			③获取JWT中的信息,在token有效期的，访问允许访问的api，通过req.user即可获取数据
+			④捕获解析JWT失败后产生的错误
+				  // TODO_06：使用全局错误处理中间件，捕获解析 JWT 失败后产生的错误
+  				  app.use((err, req, res, next) => {
+    				  // 这次错误是由 token 解析失败导致的
+  				  if (err.name === 'UnauthorizedError') {
+ 				     return res.send({
+ 				        status: 401,
+				        message: '无效的token',
+				      })
+ 				   }
+  				  res.send({
+ 				     status: 500,
+ 				     message: '未知的错误',
+ 				   })
+				  })
+  
+
+
+
+
+一般会将用户的密码进行加密，使用bcryptjs
+	npm i bcryptjs@2.4.3
+	const bcrypt=require('bcryptjs')
+	userinfo.password=bcrypt.hashSync(userinfo.password,10)//第一参数为明文密码，第二个参数为随机盐的长度
+
+后端永远不要相信前端发送过来的数据，都需要二次验证
+
+
+
+
+简化验证流程
+
+为表单中携带的每个数据项，定义验证规则
+/**
+* string()值必须是字符串
+*number()必须为数字
+*integer()必须为整型
+*alphanum()值只能是包含a-z，A-Z，0-9的字符串
+*min(length)最小长度
+*max(length)最大长度
+*required()值必须是必填项，不能为undefined
+*pattern(正则表达式)值必须符合正则表达式的规则
+*email()格式与邮箱一致
+*dataUri()验证是否为bete64格式的头像
+*/
+npm i @hapi/joi@17.1.0//已被弃用
+改为
+npm i joi
+
+实现自动对表单数据进行验证的功能
+npm i @escook/express-joi
+
+可以新建一个js文件定义验证规则
+//导入定义验证规则的包
+const joi = require('joi')
+//定义用户名和密码的验证规则,用户名只能是字符串，0-9，A-Z，a-z,最小值为1，最大值为2，是一个必填项
+const username = joi.string().alphanum().min(1).max(10).required()
+//定义验证注册和登陆表单数据的规则对象
+exports.reg_login_schema={
+    body:{
+        username,
+    }
+}
+
+
+在其他页面使用验证规则
+//导入验证表单数据的中间件
+const expressJoi = require('@escook/express-joi')
+//导入需要的验证规则对象
+const {reg_login_schema}=require('../schema/user')
+//注册新用户
+router.post("/reguser",expressJoi(reg_login_schema),userHandler.regUser)
